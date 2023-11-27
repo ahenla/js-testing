@@ -147,6 +147,7 @@ test('snapshot examples', () => {
     ]),
     // and more!
   }
+  // eslint-disable-next-line jest/prefer-snapshot-hint
   expect(object).toMatchSnapshot()
 
   // AND DOM NODES!!!

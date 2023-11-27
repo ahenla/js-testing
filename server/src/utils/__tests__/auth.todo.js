@@ -1,5 +1,11 @@
+import {isPasswordAllowed, userToJSON} from '../auth'
+
 test('isPasswordAllowed only allows some passwords', () => {
   // here's where I'll demo things for you :)
+  expect(isPasswordAllowed('')).toBe(false)
+  expect(isPasswordAllowed('ffffffff')).toBe(false)
+  expect(isPasswordAllowed('88888888')).toBe(false)
+  expect(isPasswordAllowed('lkj888j6(&^')).toBe(true)
 })
 
 test('userToJSON excludes secure properties', () => {
@@ -9,19 +15,22 @@ test('userToJSON excludes secure properties', () => {
   // doesn't have any of the properties it's not
   // supposed to.
   // Here's an example of a user object:
-  // const user = {
-  //   id: 'some-id',
-  //   username: 'sarah',
-  //   // ↑ above are properties which should
-  //   // be present in the returned object
-  //
-  //   // ↓ below are properties which shouldn't
-  //   // be present in the returned object
-  //   exp: new Date(),
-  //   iat: new Date(),
-  //   hash: 'some really long string',
-  //   salt: 'some shorter string',
-  // }
+  const safeUser = {
+    id: 'some-id',
+    username: 'sarah',
+  }
+  const user = {
+    ...safeUser,
+    // ↓ below are properties which shouldn't
+    // be present in the returned object
+    exp: new Date(),
+    iat: new Date(),
+    hash: 'some really long string',
+    salt: 'some shorter string',
+  }
+
+  const jsonUser = userToJSON(user)
+  expect(jsonUser).toEqual(safeUser)
 })
 
 //////// Elaboration & Feedback /////////
